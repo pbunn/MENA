@@ -55,7 +55,7 @@
         #envelopeContainer {
             display: none;
             perspective: 1000px;
-            transition: transform 1s ease; /* สำหรับเลื่อนซองลง */
+            transition: transform 1s ease;
         }
 
         .envelope-wrapper {
@@ -68,7 +68,6 @@
             transition: transform 1s ease;
         }
 
-        /* ฝาซอง */
         .envelope-wrapper::before {
             content: "";
             position: absolute;
@@ -81,7 +80,6 @@
             transition: transform 0.6s ease;
         }
 
-        /* ด้านหน้าซอง */
         .envelope-front {
             position: absolute;
             bottom: 0;
@@ -95,7 +93,6 @@
             border-radius: 0 0 5px 5px;
         }
 
-        /* สไตล์กระดาษจดหมาย */
         .paper {
             position: absolute;
             bottom: 10px;
@@ -116,26 +113,13 @@
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), z-index 0.1s;
         }
 
-        /* กระดาษแผ่นที่ 1 */
         #paper1 { z-index: 2; }
-        /* กระดาษแผ่นที่ 2 */
         #paper2 { z-index: 1; opacity: 0; }
 
-        /* --- จังหวะที่ 1: เปิดซอง + ดึงใบแรกขึ้น + เลื่อนซองลง --- */
-        .open-step-1 #envelopeContainer {
-            transform: translateY(120px); /* เลื่อนกลุ่มซองลงมาเพื่อให้กระดาษอยู่กลางจอ */
-        }
-        .open-step-1 .envelope-wrapper::before {
-            transform: rotateX(180deg);
-            z-index: 0;
-        }
-        .open-step-1 #paper1 {
-            transform: translate(-50%, -220px); /* ดึงใบแรกขึ้นมาให้พ้นซอง */
-            z-index: 11;
-            height: 250px;
-        }
+        .open-step-1 #envelopeContainer { transform: translateY(120px); }
+        .open-step-1 .envelope-wrapper::before { transform: rotateX(180deg); z-index: 0; }
+        .open-step-1 #paper1 { transform: translate(-50%, -220px); z-index: 11; height: 250px; }
 
-        /* --- จังหวะที่ 2: ดึงใบที่สองมาทับ --- */
         .open-step-2 #paper2 {
             opacity: 1;
             z-index: 12;
@@ -144,8 +128,8 @@
 
         @keyframes pullOutOverlay {
             0% { transform: translate(-50%, 0); z-index: 1; }
-            50% { transform: translate(-50%, -350px); z-index: 12; } /* ดึงขึ้นสูงเพื่อสลับชั้น */
-            100% { transform: translate(-50%, -230px); z-index: 12; height: 300px; width: 310px; } /* วางลงทับกลางจอ */
+            50% { transform: translate(-50%, -350px); z-index: 12; }
+            100% { transform: translate(-50%, -230px); z-index: 12; height: 300px; width: 310px; }
         }
 
         h1 { font-size: 1.4rem; color: #5D3FD3; margin: 0 0 15px 0; line-height: 1.4; }
@@ -165,7 +149,6 @@
 
         .yes-btn { background-color: #FF4D6D; margin-right: 10px; }
         .no-btn { background-color: #A9A9A9; position: absolute; }
-
         .hidden { display: none !important; }
     </style>
 </head>
@@ -181,12 +164,10 @@
     <div id="envelopeContainer">
         <div class="envelope-wrapper" id="envelopeWrapper">
             <div class="envelope-front"></div>
-            
             <div class="paper" id="paper1">
                 <h1>เทอคะเค้ามีอะไรจะถาม</h1>
                 <button onclick="pullSecondPaper()">--></button>
             </div>
-
             <div class="paper" id="paper2">
                 <h1 id="questionText" class="page-2-text">เทอเป็นแฟนกับเค้าไหม</h1>
                 <div id="btnGroup">
@@ -194,7 +175,6 @@
                     <button id="noBtn" class="no-btn" onmouseover="moveNoButton()" onclick="moveNoButton()">ไม่ตกลง</button>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -205,10 +185,7 @@
             if (pass === "1402") {
                 document.getElementById('passwordPage').style.display = 'none';
                 document.getElementById('envelopeContainer').style.display = 'block';
-                // เริ่มอนิเมชั่นเปิดซองและเลื่อนซองลง
-                setTimeout(() => {
-                    document.body.classList.add('open-step-1');
-                }, 300);
+                setTimeout(() => { document.body.classList.add('open-step-1'); }, 300);
             } else {
                 alert("คำตอบผิดนะเทอ ลองนึกใหม่สิคะ!");
             }
@@ -221,7 +198,6 @@
 
         function moveNoButton() {
             const btn = document.getElementById('noBtn');
-            // จำกัดขอบเขตการหนีให้อยู่ในหน้าจอ
             const x = Math.random() * (window.innerWidth - 120);
             const y = Math.random() * (window.innerHeight - 60);
             btn.style.left = x + 'px';
@@ -229,16 +205,28 @@
         }
 
         function celebrate() {
-            document.getElementById('questionText').innerHTML = "เย้! งั้นเธอเป็นแฟนเค้าแล้วนะ";
+            // --- ส่ง Email แจ้งเตือนผ่าน Formspree ---
+            fetch("https://formspree.io/f/myknelvq", {
+                method: "POST",
+                body: JSON.stringify({
+                    subject: "มีข่าวดีจ้าาา! ❤️",
+                    message: "เขากดปุ่ม 'ตกลง' เป็นแฟนกับคุณแล้วนะ!",
+                    time: new Date().toLocaleString('th-TH')
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+
+            document.getElementById('questionText').innerHTML = "เย้! งั้นเธอเป็นแฟนเค้าแล้วนะ ❤️";
             document.getElementById('btnGroup').classList.add('hidden');
             document.getElementById('noBtn').classList.add('hidden');
 
             var duration = 5 * 1000;
             var animationEnd = Date.now() + duration;
             var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 30 };
-
             function randomInRange(min, max) { return Math.random() * (max - min) + min; }
-
             var interval = setInterval(function() {
                 var timeLeft = animationEnd - Date.now();
                 if (timeLeft <= 0) { return clearInterval(interval); }
