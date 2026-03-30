@@ -3,58 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>You have a message! 💌</title>
-    <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;500&display=swap" rel="stylesheet">
+    <title>Surprise! 💌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Mitr:wght@300;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --purple-bg: #E6E6FA;
-            --pink-bg: #FFD1DC;
+            --google-gray: #f0ebf8;
+            --google-purple: #673ab7;
             --envelope-color: #ff8fa3;
-            --paper-color: white;
+            --paper-color: #FFD1DC;
         }
 
         body {
             margin: 0; padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--google-gray);
+            display: flex; justify-content: center; align-items: flex-start;
+            min-height: 100vh;
+            transition: background-color 0.5s ease;
+        }
+
+        /* --- Google Form Style --- */
+        #googleFormSection {
+            width: 100%;
+            max-width: 640px;
+            margin: 12px auto;
+            padding: 10px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #dadce0;
+            margin-bottom: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .form-header-line {
+            height: 10px;
+            background-color: var(--google-purple);
+            position: absolute; top: 0; width: 100%;
+        }
+
+        .form-content { padding: 24px; }
+        .form-title { font-size: 32px; margin-bottom: 8px; font-weight: 400; }
+        
+        .question-box { 
+            padding: 24px; 
+            background: white; 
+            border-radius: 8px; 
+            border: 1px solid #dadce0; 
+            margin-bottom: 12px; 
+        }
+
+        .google-input {
+            width: 100%;
+            max-width: 90%;
+            border: none;
+            border-bottom: 1px solid #dadce0;
+            padding: 8px 0;
+            font-size: 14px;
+            outline: none;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .google-input:focus { border-bottom: 2px solid var(--google-purple); }
+
+        .google-btn {
+            background-color: var(--google-purple);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* --- Minimal Password Page --- */
+        #passwordSection {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            text-align: center;
+            background-color: white;
+            position: fixed; top: 0; left: 0;
+            z-index: 500;
+        }
+
+        .minimal-title {
             font-family: 'Mitr', sans-serif;
-            background-color: var(--purple-bg);
-            transition: background-color 0.8s ease;
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh; overflow: hidden;
+            font-size: 1.5rem;
+            color: black;
+            margin-bottom: 20px;
         }
 
-        #passwordPage {
-            position: fixed; z-index: 100;
-            text-align: center; background: var(--purple-bg);
-            width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        .minimal-input {
+            padding: 12px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            border: 2px solid black;
+            text-align: center;
+            width: 220px;
+            margin-bottom: 15px;
+            outline: none;
+            font-family: 'Mitr', sans-serif;
         }
 
-        .pass-input {
-            padding: 12px; font-size: 1.2rem; border-radius: 10px;
-            border: 2px solid #9370DB; text-align: center; width: 200px;
-            margin-bottom: 15px; outline: none;
+        .minimal-btn {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 50px;
+            background: black;
+            color: white;
+            font-family: 'Mitr', sans-serif;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        #envelopeContainer { display: none; perspective: 1000px; transition: transform 1s ease; }
+        /* --- Envelope Section --- */
+        #envelopePage {
+            display: none;
+            width: 100vw; height: 100vh;
+            background-color: white;
+            justify-content: center; align-items: center;
+            position: fixed; top: 0; left: 0; z-index: 1000;
+        }
+
         .envelope-wrapper {
             position: relative; width: 320px; height: 220px;
             background-color: var(--envelope-color); border-radius: 0 0 5px 5px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 1s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         
-        @media (max-width: 360px) {
-            .envelope-wrapper { width: 280px; height: 192.5px; }
-            .paper { width: 260px !important; min-height: 192.5px !important; }
-        }
-
         .envelope-wrapper::before {
             content: ""; position: absolute; top: 0; z-index: 10;
             border-top: 120px solid #ffb3c1; border-left: 160px solid transparent;
             border-right: 160px solid transparent; transform-origin: top; transition: transform 0.6s ease;
-        }
-        
-        @media (max-width: 360px) {
-            .envelope-wrapper::before { border-top-width: 105px; border-left-width: 140px; border-right-width: 140px; }
         }
 
         .envelope-front {
@@ -62,128 +150,142 @@
             border-top: 110px solid transparent; border-right: 160px solid var(--envelope-color);
             border-bottom: 110px solid var(--envelope-color); border-left: 160px solid #ffb3c1;
         }
-        
-        @media (max-width: 360px) {
-            .envelope-front { border-top-width: 96.25px; border-right-width: 140px; border-bottom-width: 96.25px; border-left-width: 140px; }
-        }
 
         .paper {
+            font-family: 'Mitr', sans-serif;
             position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
             width: 300px; min-height: 220px; background: var(--paper-color);
             padding: 20px; text-align: center; border-radius: 5px;
             box-sizing: border-box; display: flex; flex-direction: column;
             justify-content: center; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: all 0.6s ease; z-index: 2;
+            transition: all 0.6s ease; z-index: 2; color: black;
         }
 
-        .open-envelope #envelopeContainer { transform: translateY(120px); }
         .open-envelope .envelope-wrapper::before { transform: rotateX(180deg); z-index: 0; }
         .open-envelope .paper { transform: translate(-50%, -230px); z-index: 11; height: 320px; }
 
-        @media (max-width: 360px) {
-            .open-envelope .paper { height: 280px; }
-        }
-
-        h1 { font-size: 1.4rem; color: #5D3FD3; margin: 0 0 15px 0; line-height: 1.4; }
-        
-        @media (max-width: 360px) {
-            h1 { font-size: 1.2rem; }
-        }
-        
-        .pink-text { color: #FF4D6D !important; }
-
-        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: center; min-height: 80px; width: 100%; }
-        button {
-            padding: 10px 20px; border: none; border-radius: 50px;
+        .btn-group button {
+            padding: 8px 20px; border: 2px solid black; border-radius: 50px;
             cursor: pointer; font-family: 'Mitr', sans-serif;
-            background: #9370DB; color: white; transition: 0.2s;
+            background: black; color: white; margin: 5px;
         }
-        button:hover { transform: scale(1.05); }
-        .confirm-btn { background-color: #FF4D6D; }
-        .back-btn { background-color: #A9A9A9; }
+        .confirm-btn { background: #FF4D6D !important; color: black !important; }
+        .back-btn { background: #A9A9A9 !important; color: black !important; }
 
         .hidden { display: none !important; }
-        
-        #stepFinal_Success {
-            position: relative;
-            padding: 40px 20px;
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .rose {
-            position: absolute;
-            font-size: 3rem; 
-        }
-        
-        @media (max-width: 360px) {
-            .rose { font-size: 2.5rem; }
-        }
-
-        .rose-left {
-            bottom: 10px;
-            left: 10px;
-        }
-
-        .rose-right {
-            bottom: 10px;
-            right: 10px;
-        }
+        .rose { position: absolute; font-size: 2.5rem; bottom: 10px; }
+        .rose-left { left: 10px; }
+        .rose-right { right: 10px; }
     </style>
 </head>
-<body id="mainBody">
+<body>
 
-    <div id="passwordPage">
-        <h1>On what date did we start talking?</h1>
-        <input type="text" id="passInput" class="pass-input" placeholder="DDMM" maxlength="4">
-        <br>
-        <button onclick="checkPassword()">Submit</button>
+    <div id="googleFormSection">
+        
+        <div id="formPart1">
+            <div class="form-card">
+                <div class="form-header-line"></div>
+                <div class="form-content">
+                    <div class="form-title">University Survey</div>
+                    <p style="font-size: 14px; color: #202124;">Part 1: General Information</p>
+                    <hr style="border: 0; border-top: 1px solid #dadce0;">
+                    <p style="font-size: 12px; color: #d93025;">* Required</p>
+                </div>
+            </div>
+
+            <div class="question-box">
+                <p>Nickname <span style="color:red">*</span></p>
+                <input type="text" id="nicknameInput" class="google-input" placeholder="Your answer">
+            </div>
+
+            <div class="question-box">
+                <p>Age <span style="color:red">*</span></p>
+                <input type="text" class="google-input" placeholder="Your answer">
+            </div>
+
+            <div class="question-box">
+                <p>University <span style="color:red">*</span></p>
+                <input type="text" class="google-input" placeholder="Your answer">
+            </div>
+
+            <button class="google-btn" onclick="goToFormPart2()">Next</button>
+        </div>
+
+        <div id="formPart2" class="hidden">
+            <div class="form-card">
+                <div class="form-header-line"></div>
+                <div class="form-content">
+                    <div class="form-title">University Survey</div>
+                    <p style="font-size: 14px; color: #202124;">Part 2: Opinions & Feedback</p>
+                </div>
+            </div>
+
+            <div class="question-box">
+                <p>คุณคิดเห็นอย่างไรกับมหาลัยที่คุณเรียน <span style="color:red">*</span></p>
+                <input type="text" class="google-input" placeholder="Your answer">
+            </div>
+
+            <div class="question-box">
+                <p>คุณต้องการให้มหาลัยคุณมีสิ่งใดเพิ่ม <span style="color:red">*</span></p>
+                <input type="text" class="google-input" placeholder="Your answer">
+            </div>
+
+            <div class="question-box">
+                <p>คุณมีสิ่งใดที่คุณต้องการให้มหาลัยของคุณปรับเปลี่ยน <span style="color:red">*</span></p>
+                <input type="text" class="google-input" placeholder="Your answer">
+            </div>
+
+            <button class="google-btn" onclick="showPasswordPage()">Submit</button>
+        </div>
     </div>
 
-    <div id="envelopeContainer">
-        <div class="envelope-wrapper" id="envelopeWrapper">
+    <div id="passwordSection">
+        <h1 class="minimal-title">What date did we first meet?</h1>
+        <input type="text" id="passInput" class="minimal-input" placeholder="Enter DDMM" maxlength="4">
+        <br>
+        <button class="minimal-btn" onclick="checkPassword()">Submit</button>
+    </div>
+
+    <div id="envelopePage">
+        <div class="envelope-wrapper">
             <div class="envelope-front"></div>
-            
             <div class="paper" id="mainPaper">
+                
                 <div id="stepA">
-                    <h1>Hey, I have a question for you...</h1>
-                    <button onclick="changeStep('stepB')">--></button>
+                    <h1 style="font-size:1.3rem; margin-bottom:15px;">Hey, I have a question for you...</h1>
+                    <button class="minimal-btn" onclick="changeStep('stepB')">Next</button>
                 </div>
 
                 <div id="stepB" class="hidden">
-                    <h1 class="pink-text">Will you be my partner?</h1>
+                    <h1 style="font-size:1.3rem; margin-bottom:15px;">Will you be my partner?</h1>
                     <div class="btn-group">
-                        <button class="confirm-btn" onclick="changeStep('stepC_Yes')">Yes</button>
+                        <button class="confirm-btn" onclick="handleFinalResult('YES ❤️')">Yes</button>
                         <button class="back-btn" onclick="changeStep('stepC_No')">Not yet</button>
                     </div>
                 </div>
 
                 <div id="stepC_No" class="hidden">
-                    <h1 class="pink-text">Not yet? 😔</h1>
+                    <h1 style="font-size:1.3rem; margin-bottom:15px;">Not yet? 😔</h1>
                     <div class="btn-group" style="position: relative;">
-                        <button id="noBtn" class="back-btn" onclick="handleNoClick()" style="position: relative; transition: 0.2s ease;">No</button>
-                        <button class="confirm-btn" onclick="resetNoButton(); changeStep('stepB');">Let me think again</button>
+                        <button id="noBtn" class="back-btn" onclick="handleNoClick()" style="position: relative;">No</button>
+                        <button class="confirm-btn" onclick="resetNoButton(); changeStep('stepB');">Think again</button>
                     </div>
                 </div>
 
                 <div id="stepC_Yes" class="hidden">
-                    <h1 class="pink-text">Are you sure? 🥺</h1>
+                    <h1 style="font-size:1.3rem; margin-bottom:15px;">Are you sure? 🥺</h1>
                     <div class="btn-group">
                         <button class="confirm-btn" onclick="celebrate()">Yes, I'm sure</button>
-                        <button class="back-btn" onclick="changeStep('stepB')">Wait, let me think</button>
+                        <button class="back-btn" onclick="changeStep('stepB')">Wait...</button>
                     </div>
                 </div>
 
                 <div id="stepFinal_Fail" class="hidden">
-                    <h1 class="pink-text">Okay, but I'm not giving up! 😝</h1>
+                    <h1 style="font-size:1.3rem; margin-bottom:15px;">Okay, but I'm not giving up! 😝</h1>
                 </div>
 
                 <div id="stepFinal_Success" class="hidden">
-                    <h1 class="pink-text">Yay! We are officially together now ❤️</h1>
+                    <h1 style="font-size:1.3rem; margin-bottom:15px;">Yay! We are officially together now ❤️</h1>
                     <span class="rose rose-left">🌹</span>
                     <span class="rose rose-right">🌹</span>
                 </div>
@@ -193,28 +295,47 @@
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
-        const ENDPOINT = "https://formspree.io/f/myknelvq";
+        let nickname = ""; // Variable to store nickname
         let moveCount = 0;
+        const ENDPOINT = "https://formspree.io/f/myknelvq"; 
 
-        function sendNotify(result) {
+        function sendNotify(resultText) {
             fetch(ENDPOINT, {
                 method: "POST",
                 body: JSON.stringify({
-                    status: result,
+                    nickname: nickname || "Unknown",
+                    result: resultText,
                     time: new Date().toLocaleString()
                 }),
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
             });
         }
 
+        function goToFormPart2() {
+            // Save nickname from input
+            nickname = document.getElementById('nicknameInput').value;
+            document.getElementById('formPart1').classList.add('hidden');
+            document.getElementById('formPart2').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function showPasswordPage() {
+            document.getElementById('googleFormSection').style.display = 'none';
+            document.getElementById('passwordSection').style.display = 'flex';
+            document.body.style.backgroundColor = 'white';
+        }
+
         function checkPassword() {
             const pass = document.getElementById('passInput').value;
-            if (pass === "1402") {
-                document.getElementById('passwordPage').style.display = 'none';
-                document.getElementById('envelopeContainer').style.display = 'block';
-                setTimeout(() => { document.body.classList.add('open-envelope'); }, 300);
+            if (pass === "2402") {
+                document.getElementById('passwordSection').style.display = 'none';
+                const envPage = document.getElementById('envelopePage');
+                envPage.style.display = 'flex';
+                setTimeout(() => {
+                    document.body.classList.add('open-envelope');
+                }, 300);
             } else {
-                alert("That's wrong! Try to remember again.");
+                alert("Incorrect answer. Try again.");
             }
         }
 
@@ -222,11 +343,15 @@
             const steps = ['stepA', 'stepB', 'stepC_No', 'stepC_Yes', 'stepFinal_Fail', 'stepFinal_Success'];
             steps.forEach(id => document.getElementById(id).classList.add('hidden'));
             document.getElementById(nextStepId).classList.remove('hidden');
+        }
 
-            if (nextStepId === 'stepA') {
-                document.getElementById('mainBody').style.backgroundColor = '#E6E6FA';
+        // Handle specific result clicks
+        function handleFinalResult(result) {
+            if(result === 'YES ❤️') {
+                changeStep('stepC_Yes');
             } else {
-                document.getElementById('mainBody').style.backgroundColor = '#FFD1DC';
+                sendNotify(result);
+                changeStep('stepFinal_Fail');
             }
         }
 
@@ -238,23 +363,21 @@
                 noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
                 moveCount++;
             } else {
-                sendNotify("Result: NO (Pressed No after dodging)");
-                changeStep('stepFinal_Fail');
+                handleFinalResult("Result: NO (Pressed No after dodging)");
             }
         }
 
         function resetNoButton() {
             moveCount = 0;
-            const noBtn = document.getElementById('noBtn');
-            noBtn.style.transform = `translate(0, 0)`;
+            document.getElementById('noBtn').style.transform = `translate(0, 0)`;
         }
 
         function celebrate() {
-            sendNotify("Result: YES ❤️");
+            sendNotify("Result: YES ❤️"); // Send notification with nickname and YES
             changeStep('stepFinal_Success');
             var duration = 5 * 1000;
             var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 30 };
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 2000 };
             function randomInRange(min, max) { return Math.random() * (max - min) + min; }
             var interval = setInterval(function() {
                 var timeLeft = animationEnd - Date.now();
